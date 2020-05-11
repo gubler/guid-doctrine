@@ -33,15 +33,15 @@ class GuidType extends Type
     /**
      * @var string
      */
-    const NAME = 'guid';
+    public const NAME = 'guid';
 
     /**
      * {@inheritdoc}
      *
-     * @param array                                     $fieldDeclaration
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param array            $fieldDeclaration
+     * @param AbstractPlatform $platform
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         return $platform->getGuidTypeDeclarationSQL($fieldDeclaration);
     }
@@ -49,8 +49,8 @@ class GuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param string|null                               $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param string|null      $value
+     * @param AbstractPlatform $platform
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -80,8 +80,8 @@ class GuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null                        $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param UuidInterface|null $value
+     * @param AbstractPlatform   $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -101,7 +101,7 @@ class GuidType extends Type
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return static::NAME;
     }
@@ -109,10 +109,11 @@ class GuidType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param AbstractPlatform $platform
+     *
      * @return boolean
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }

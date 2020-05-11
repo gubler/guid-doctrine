@@ -3,6 +3,6 @@
 .DS_Store
 build
 composer.lock
-docs
 phpunit.xml
 vendor
+/.phpunit.result.cache

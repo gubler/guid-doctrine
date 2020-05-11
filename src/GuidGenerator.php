@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\AbstractIdGenerator;
 use Ramsey\Uuid\Codec\GuidStringCodec;
 use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * GUID generator for the Doctrine ORM.
@@ -26,11 +27,11 @@ class GuidGenerator extends AbstractIdGenerator
     /**
      * Generate an identifier
      *
-     * @param \Doctrine\ORM\EntityManager  $em
+     * @param EntityManager                $em
      * @param \Doctrine\ORM\Mapping\Entity $entity
-     * @return \Ramsey\Uuid\UuidInterface
+     * @return UuidInterface
      */
-    public function generate(EntityManager $em, $entity)
+    public function generate(EntityManager $em, $entity): UuidInterface
     {
         $factory = new UuidFactory();
 
