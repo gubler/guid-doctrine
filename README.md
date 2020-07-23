@@ -1,7 +1,6 @@
 # gubler/guid-doctrine
 
-This is based off of the gubler/guid-doctrine project. The only thing it does differently
-use the `GuidStringCodec` for the UUID. This to handle Active Directory GUIDs.
+This is based off of the ramsey/uuid-doctrine project. The only thing this project does differently is return GUIDs. This to handle Active Directory GUIDs.
 
 ---
 

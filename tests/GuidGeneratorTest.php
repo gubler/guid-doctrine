@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Entity;
 use Gubler\Guid\Doctrine\GuidGenerator;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Codec\GuidStringCodec;
-use Ramsey\Uuid\Rfc4122\UuidV4;
+use Ramsey\Uuid\Guid\Guid;
 
 /**
  * @covers \Gubler\Guid\Doctrine\GuidGenerator
@@ -15,7 +14,7 @@ use Ramsey\Uuid\Rfc4122\UuidV4;
 final class GuidGeneratorTest extends TestCase
 {
     /**
-     * Test that a UUIDv4 using the GuidStringCodec was generated.
+     * Test that a GUID was generated.
      *
      * @throws \ReflectionException
      */
@@ -28,12 +27,6 @@ final class GuidGeneratorTest extends TestCase
 
         $guid = $generator->generate($em, $entity);
 
-        $reflect = new \ReflectionClass(UuidV4::class);
-        $prop = $reflect->getProperty('codec');
-        $prop->setAccessible(true);
-        $codec = $prop->getValue($guid);
-
-        $this->assertInstanceOf(UuidV4::class, $guid);
-        $this->assertInstanceOf(GuidStringCodec::class, $codec);
+        $this->assertInstanceOf(Guid::class, $guid);
     }
 }

@@ -14,13 +14,13 @@
 namespace Gubler\Guid\Doctrine;
 
 use InvalidArgumentException;
-use Ramsey\Uuid\Codec\GuidStringCodec;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Guid\Guid;
 use Ramsey\Uuid\UuidFactory;
-use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\FeatureSet;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -58,29 +58,27 @@ class GuidType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof Guid) {
             return $value;
         }
 
-        $factory = new UuidFactory();
-
-        $codec = new GuidStringCodec($factory->getUuidBuilder());
-
-        $factory->setCodec($codec);
+        $useGuids = true;
+        $featureSet = new FeatureSet($useGuids);
+        $factory = new UuidFactory($featureSet);
 
         try {
-            $uuid = $factory->fromString($value);
+            $guid = $factory->fromString($value);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailed($value, static::NAME);
         }
 
-        return $uuid;
+        return $guid;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null $value
+     * @param Guid|null $value
      * @param AbstractPlatform   $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -89,7 +87,7 @@ class GuidType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid || Uuid::isValid($value)) {
+        if ($value instanceof Guid || Guid::isValid($value)) {
             return (string) $value;
         }
 

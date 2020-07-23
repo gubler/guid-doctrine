@@ -15,9 +15,9 @@ namespace Gubler\Guid\Doctrine;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Codec\GuidStringCodec;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\FeatureSet;
+use Ramsey\Uuid\Guid\Guid;
 use Ramsey\Uuid\UuidFactory;
-use Ramsey\Uuid\UuidInterface;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -26,7 +26,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
  *
  * GUID fields will be stored as a string in the database and converted back to
- * the Uuid value object when querying.
+ * the GUID value object when querying.
  */
 class GuidBinaryType extends Type
 {
@@ -56,6 +56,8 @@ class GuidBinaryType extends Type
      *
      * @param string|null      $value
      * @param AbstractPlatform $platform
+     *
+     * @return Guid|null
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -63,29 +65,27 @@ class GuidBinaryType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof Guid) {
             return $value;
         }
 
-        $factory = new UuidFactory();
-
-        $codec = new GuidStringCodec($factory->getUuidBuilder());
-
-        $factory->setCodec($codec);
+        $useGuids = true;
+        $featureSet = new FeatureSet($useGuids);
+        $factory = new UuidFactory($featureSet);
 
         try {
-            $uuid = $factory->fromBytes($value);
+            $guid = $factory->fromBytes($value);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailed($value, static::NAME);
         }
 
-        return $uuid;
+        return $guid;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param UuidInterface|null $value
+     * @param Guid|null $value
      * @param AbstractPlatform   $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -94,7 +94,7 @@ class GuidBinaryType extends Type
             return null;
         }
 
-        if ($value instanceof Uuid) {
+        if ($value instanceof Guid) {
             return $value->getBytes();
         }
 
