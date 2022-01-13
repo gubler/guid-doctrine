@@ -22,8 +22,8 @@
         "source": "https://github.com/gubler/guid-doctrine"
     },
     "require": {
-        "php": "^7.2",
-        "doctrine/orm": "^2.5",
+        "php": "^7.2|^8.0",
+        "doctrine/orm": "^2.5|^3.0",
         "ramsey/uuid": "^4.0"
     },
     "require-dev": {
